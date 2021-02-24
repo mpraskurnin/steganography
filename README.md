@@ -1,5 +1,6 @@
 # Steganography
 From Wikipedia: Steganography is the practice of concealing a message within another message or a physical object. In computing/electronic contexts, a computer file, message, image, or video is concealed within another file, message, image, or video.
+
 In this fashion, this C program can encode a message string within the least significant bits of a PNG's pixel colour channels, as well as reverse that process to decode that message. Modifying the LSBs means that we change the colour values of the pixels as we encode the data, but the change is so minor that it isn't perceptible.
 ## PNG Basics
 PNGs are composed of an 8-byte file signature, followed by a sequence of chunks. Each chunk is made up of:
@@ -20,5 +21,7 @@ To modify the pixels in the PNG, there are a couple steps needed:
 
 ## Resources
 For details on the PNG standard: http://www.libpng.org/pub/png/spec/1.2/PNG-Contents.html
+
 Project inspired by [Computerphile](https://www.youtube.com/watch?v=TWEXCYQKyDc).
+
 PNG processing was the theme of the labs in ECE252: Systems Programming and Concurrency. Thus, some code (specifically relating to zlib compression and CRC) is written by lab TAs and is labelled as such.
