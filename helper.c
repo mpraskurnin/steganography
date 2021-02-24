@@ -266,16 +266,16 @@ void encodeMessage(U8 **inf, U64 infsize, char *MESSAGE, int bytesPerSample, con
 				continue; //filter byte
 			}
 			int writeBit = messageChar & (1 << (ASCII_NUM_BITS - 1 - j)) ? 1 : 0;
-			printf("%i", writeBit);
+			//printf("%i", writeBit);
 			U8 newChar = writeBit ? (*inf)[i] | 1 : (*inf)[i] & (~1);
 			(*inf)[i] = newChar;
 			i++;
 		}
-		printf(" ");
+		//printf(" ");
 		if (messageChar == 0)
 			break;
 	}
-	printf("\n");
+	//printf("\n");
 }
 
 int decodeMessage(U8 *inf, U64 infsize, const int SCANLINE_LENGTH) {

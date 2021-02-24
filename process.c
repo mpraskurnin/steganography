@@ -105,7 +105,7 @@ int main(int argc, char **argv)
 	}
 	//have IDAT bytes in memory, now want to modify them and write them back
 	encodeMessage(&inf, infsize, MESSAGE, bytesPerSample, SCANLINE_LENGTH);
-	printHex(inf, infsize, SCANLINE_LENGTH);
+	//printHex(inf, infsize, SCANLINE_LENGTH);
 
 	//inf is now contains the final inflated data, which we need to deflate (compress)
 	U8 *def = malloc(sizeof(U8) * infsize); //deflated won't be larger than inflated data
@@ -123,7 +123,6 @@ int main(int argc, char **argv)
 	fileBytes = realloc(fileBytes, fileSize - (idatEnd - idatStart) + (CHUNK_LEN_SIZE + CHUNK_TYPE_SIZE + defsize + CHUNK_CRC_SIZE));
 	set_cursor(&cursor, idatEnd, 0); //cursor at end of prev last idat chunk
 	//move the rest of the file forwards to make space for new deflated data
-	printf("dest offset: %lu\nsource offset: %lu\nsize: %lu\n", idatStart + CHUNK_LEN_SIZE + CHUNK_TYPE_SIZE + defsize + CHUNK_CRC_SIZE, cursor, fileSize - cursor);
 	//dest: end of new single idat chunk. source: idatEnd. size: num bytes from idatEnd to eof.
 	memmove((void *)(fileBytes + sizeof(U8)*(idatStart + CHUNK_LEN_SIZE + CHUNK_TYPE_SIZE + defsize + CHUNK_CRC_SIZE)), (void *)(fileBytes + sizeof(U8)*cursor), sizeof(U8) * (fileSize - cursor));
 	//copy def to start of data
@@ -140,11 +139,14 @@ int main(int argc, char **argv)
 	//new crc written, cursor at end of chunk
 
 
-	char newname[7 + strlen(argv[1])];
-	strcpy(newname, "stega_");
-	FILE *toWrite = fopen(strcat(newname, argv[1]), "wb");
+	FILE *toWrite = fopen("stega.png", "wb");
+	if (toWrite == NULL) {
+		printf("error opening write file\n");
+		return -1;
+	}
 	fwrite(fileBytes, sizeof(U8), fileSize, toWrite);
 	fclose(toWrite);
+	printf("stega.png created.\n");
 	free(fileBytes);
 	fclose(f);
 	return 0;
